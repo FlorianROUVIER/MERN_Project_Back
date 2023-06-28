@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Users = require('../../models/User');
+const mongoose = require('mongoose');
 
 // Afficher tous les utilisateurs
 router.get('/', (req, res) => {
@@ -19,7 +20,7 @@ router.post('/', async (req, res) => {
       phoneNumber: req.body.phoneNumber,
       isAdmin: req.body.isAdmin || false
     });
-  
+    console.log(req.body)
     try {
       const newUser = await user.save();
       res.status(201).json(newUsers);
@@ -29,7 +30,17 @@ router.post('/', async (req, res) => {
   });
   
   // Afficher un utilisateur par ID
-  router.get('/:id', getUser, (req, res) => {
+  router.get('/:id', getUser,  async(req, res) => {
+    try {
+      const id = new mongoose.Types.ObjectId(req.params.id)
+      const user = await Users.find(id);
+      if (user == null) {
+        return res.status(404).json({ message: 'Utilisateur non trouvé' });
+      }
+      res.user = user;
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
     res.json(res.user);
   });
   
@@ -80,14 +91,14 @@ router.post('/', async (req, res) => {
   // Middleware pour récupérer un utilisateur par ID
   async function getUser(req, res, next) {
     try {
-      const user = await User.findById(req.params.id);
-      if (user == null) {
-        return res.status(404).json({ message: 'Utilisateur non trouvé' });
+      console.log(req.params)
+      if(typeof req.params.id != 'string' ){
+        throw new Error('id invalid')
       }
-      res.user = user;
       next();
-    } catch (err) {
-      return res.status(500).json({ message: err.message });
+    } 
+    catch (error){
+      return res.status(404).json(JSON.stringify(error)).end()
     }
   }
 
