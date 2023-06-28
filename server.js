@@ -1,10 +1,16 @@
+require('dotenv').config()
 const express = require("express");
+let cors = require("cors");
+
 const app = express();
 
-let cors = require("cors");
+const connectDB = require('./db/conn');
 
 app.use(express.json());
 app.use(cors());
+
+// Connect DB
+connectDB()
 
 app.get("/", (req, res) => {
   res.writeHead(200, { "Content-Type": "text/html" });
