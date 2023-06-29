@@ -8,6 +8,7 @@ function generateToken(user) {
     id: user._id,
     email: user.email,
     password: user.password,
+    isAdmin: user.isAdmin
   };
 
   return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '30d' });

@@ -1,25 +1,39 @@
 // authMiddleware.js
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 function isAuthenticated(req, res, next) {
-  const token = req.headers.authorization;
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    const token = authHeader.split(" ")[1];
 
-  if (!token) {
-    return res.status(401).json({ error: 'Non connecté' });
-  }
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    req.user.isAdmin = decoded.isAdmin ? true : false;
-    next();
-
-    if (decoded.isAdmin) {
-        req.user.isAdmin = true;
+    try {
+      jwt.verify(token, process.env.JWT_SECRET);
+      next();
+    } catch (error) {
+      return res.status(401).json({ error: "Token invalide" });
     }
-  } catch (error) {
-    return res.status(401).json({ error: 'Token invalide' });
+  } else {
+    res.status(401).json({ error: "Non connecté" });
   }
 }
 
-module.exports = isAuthenticated;
+function isAdmin(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    const token = authHeader.split(" ")[1];
+
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      if (decoded.isAdmin)
+        next();
+      else 
+        throw new Error('user is not admin')
+    } catch (error) {
+      return res.status(401).json({ error: "Token invalide" });
+    }
+  } else {
+    res.status(401).json({ error: "Non connecté" });
+  }
+}
+
+module.exports = {isAuthenticated, isAdmin};

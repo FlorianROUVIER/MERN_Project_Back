@@ -30,7 +30,7 @@ router.post('/adminProduit', async (req, res) => {
  });
 
 
-router.get('/:name', async (req, res) => {
+router.get(':name', async (req, res) => {
   try{
     const name = req.params.name
     const product = await Products.find(name);
@@ -40,13 +40,8 @@ router.get('/:name', async (req, res) => {
     }
     res.json(product);
   } catch(err) {
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal sedrver error' });
   }
 });
-
-
-// router.get('/cart', (req, res) => {
-//   res.send('Panier');
-// });
 
 module.exports = router;

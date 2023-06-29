@@ -3,15 +3,11 @@ const router = express.Router();
 const Users = require('../../models/User');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const isAuthenticated = require('../../middleware/authMiddleware');
-
+const authMiddlewares = require('../../middleware/authMiddleware');
 
 // Afficher tous les utilisateurs
-router.get('/', isAuthenticated, async (req, res) => {
-  if (req.user.isAdmin) {
-    return res.status(401).json({ error: 'Non autorisé' });
-  }
-
+router.get('/', authMiddlewares.isAdmin, async (req, res) => {
+  console.log('irepo');
   try {
     const users = await Users.find();
     res.json(users);
