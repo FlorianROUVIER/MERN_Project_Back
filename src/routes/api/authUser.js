@@ -15,7 +15,12 @@ router.post('/', async (req, res) => {
     }
 
     const token = generateToken(user);
-    res.json({token});
+    res.json({token, user: 
+      {
+        firstName: user.firstName, 
+        lastName: user.lastName,
+        isAdmin: user.isAdmin
+      }});
     
   } catch (err) {
     res.status(500).json({ error: 'Erreur lors de la connexion' });
