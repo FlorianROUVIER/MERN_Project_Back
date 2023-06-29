@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
     });
     console.log(req.body)
     try {
-      const newUsers = await user.save();
+      const newUsers = await product.save();
       res.status(201).json(newUsers);
     } catch (err) {
       res.status(400).json({ message: err.message });
