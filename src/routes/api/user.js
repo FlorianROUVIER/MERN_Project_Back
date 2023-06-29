@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
     });
     console.log(req.body)
     try {
-      const newUsers = await product.save();
+      const newUsers = await user.save();
       res.status(201).json(newUsers);
     } catch (err) {
       res.status(400).json({ message: err.message });
@@ -57,7 +57,7 @@ router.post('/', async (req, res) => {
   });
   
   // Mettre à jour un utilisateur
-  router.put('/:id', getUser, async (req, res) => {
+  router.patch('/:id', getUser, async (req, res) => {
     if (req.body.firstName != null) {
       res.user.firstName = req.body.firstName;
     }

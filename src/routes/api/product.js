@@ -30,9 +30,19 @@ router.post('/adminProduit', async (req, res) => {
  });
 
 
-// router.get('/products', (req, res) => {
-//     res.send('Produits');
-// });
+router.get('/:name', async (req, res) => {
+  try{
+    const name = req.params.name
+    const product = await Products.find(name);
+    console.log(product)
+    if (product == null) { 
+      return res.status(404).json({ message: 'Produit non trouvé' });
+    }
+    res.json(product);
+  } catch(err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 // router.get('/cart', (req, res) => {
