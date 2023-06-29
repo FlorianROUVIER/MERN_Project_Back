@@ -10,13 +10,13 @@ router.get('/', (req, res) => {
 });
 
 
-router.get('/products', (req, res) => {
-    res.send('Produits');
-});
+// router.get('/products', (req, res) => {
+//     res.send('Produits');
+// });
 
 
-router.get('/cart', (req, res) => {
-  res.send('Panier');
-});
+// router.get('/cart', (req, res) => {
+//   res.send('Panier');
+// });
 
 module.exports = router;
