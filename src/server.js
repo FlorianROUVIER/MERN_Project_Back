@@ -21,6 +21,8 @@ connectDB();
 
 app.use('/', routerProducts);
 app.use('/admin', routerUsers);
+app.use('/login', routerUsers);
+
 
 app.listen(3001, () => {
   console.log("Test ok");
