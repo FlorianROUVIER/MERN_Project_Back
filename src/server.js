@@ -11,7 +11,7 @@ const connectDB = require('./db/conn');
 
 const routerUsers = require('./routes/api/user');
 const routerProducts = require('./routes/api/product');
-
+const routerAuth = require('./routes/api/authUser');
 
 app.use(express.json());
 app.use(cors());
@@ -21,7 +21,7 @@ connectDB();
 
 app.use('/', routerProducts);
 app.use('/admin', routerUsers);
-app.use('/login', routerUsers);
+app.use('/login', routerAuth);
 
 
 app.listen(3001, () => {

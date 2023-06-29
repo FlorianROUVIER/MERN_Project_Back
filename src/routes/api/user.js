@@ -2,47 +2,34 @@ const express = require('express');
 const router = express.Router();
 const Users = require('../../models/User');
 const mongoose = require('mongoose');
-const { generateToken, authenticateUser } = require('../../auth/auth');
 const bcrypt = require('bcrypt');
-
+const isAuthenticated = require('../../middleware/authMiddleware');
 
 
 // Afficher tous les utilisateurs
-router.get('/', (req, res) => {
-    Users.find()
-      .then(user => res.json(user))
-      .catch(err => res.status(404).json({ err: 'nope' }));
-});
-
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+router.get('/', isAuthenticated, async (req, res) => {
+  if (req.user.isAdmin) {
+    return res.status(401).json({ error: 'Non autorisé' });
+  }
 
   try {
-    const user = await authenticateUser(email, password);
-
-    if (!user) {
-      return res.status(401).json({ error: 'Identifiants invalides' });
-    }
-
-    const token = generateToken(user);
-
-    res.json({token});
-    console.log(token)
+    const users = await Users.find();
+    res.json(users);
   } catch (err) {
-    res.status(500).json({ error: 'Erreur lors de la connexion' });
+    res.status(500).json({ error: 'Erreur lors de la récupération des utilisateurs' });
   }
 });
 
 // Créer un nouvel utilisateur
 router.post('/', async (req, res) => {
-   const { firstName, lastName, email, password, phoneNumber, isAdmin } = req.body;
+   const { firstName, lastName, email, phone, password, isAdmin } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new Users({
       firstName,
       lastName,
+      phone,
       email,
       password: hashedPassword,
-      phoneNumber,
       isAdmin: isAdmin || false
     });
     console.log(req.body)
