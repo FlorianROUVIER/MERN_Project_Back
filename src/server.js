@@ -10,16 +10,17 @@ const app = express();
 const connectDB = require('./db/conn');
 
 const Users = require('./routes/api/user');
+const Products = require('./routes/api/product');
+
 
 app.use(express.json());
 app.use(cors());
 
-app.use('/', Users);
-app.use('/admin', Users);
-
 // Connect DB
 connectDB();
 
+app.use('/', Products);
+app.use('/admin', Users);
 
 app.listen(3001, () => {
   console.log("Test ok");

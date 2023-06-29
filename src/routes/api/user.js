@@ -4,14 +4,14 @@ const Users = require('../../models/User');
 const mongoose = require('mongoose');
 
 // Afficher tous les utilisateurs
-router.get('/', (req, res) => {
+router.get('/admin', (req, res) => {
     Users.find()
-        .then(question => res.json(question))
+        .then(user => res.json(user))
         .catch(err => res.status(404).json({err: 'nope'}))
 });
 
 // Créer un nouvel utilisateur
-router.post('/', async (req, res) => {
+router.post('/admin', async (req, res) => {
     const user = new Users({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
   });
   
   // Afficher un utilisateur par ID
-  router.get('/:id', getUser,  async(req, res) => {
+  router.get('/admin/:id', getUser,  async(req, res) => {
     try {
       const id = new mongoose.Types.ObjectId(req.params.id)
       const user = await Users.find(id);
@@ -45,7 +45,7 @@ router.post('/', async (req, res) => {
   });
   
   // Mettre à jour un utilisateur
-  router.put('/:id', getUser, async (req, res) => {
+  router.put('/admin/:id', getUser, async (req, res) => {
     if (req.body.firstName != null) {
       res.user.firstName = req.body.firstName;
     }
@@ -79,7 +79,7 @@ router.post('/', async (req, res) => {
   });
   
   // Supprimer un utilisateur
-  router.delete('/:id', getUser, async (req, res) => {
+  router.delete('/admin/:id', getUser, async (req, res) => {
     try {
       await res.user.remove();
       res.json({ message: 'Utilisateur supprimé' });
