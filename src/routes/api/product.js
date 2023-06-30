@@ -10,12 +10,12 @@ router.get('/', (req, res) => {
 });
 
 router.post('/adminProduit', async (req, res) => {
-  const { title, image, description, price, size, quantity, sport } = req.body;
+  const { title, image, description, prix, size, quantity, sport } = req.body;
    const product = new Products({
     title,
     image,
     description,
-    price,
+    prix,
     size,
     quantity,
     sport
